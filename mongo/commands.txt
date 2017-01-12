@@ -1,0 +1,14 @@
+mongo localhost:27017
+
+mongoimport --host EPBYMINW1508 --port 27017 --db gradesDb --collection grades --type json --file "D:\front end mentoring\mongo\grades.json"
+
+
+db.grades.aggregate([ {"$unwind": "$scores"}, {"$match": { "scores.type": {"$ne": "quiz"} } }, { "$group": {_id:{class:"$class_id"}, average: {"$avg": "$scores.score"}} }, { "$sort": {average: -1} }, {"$limit": 1} ])
+
+mongod --port 27017 --dbpath "D:\front end mentoring\mongo\grades"  --replSet rep1
+
+mongo --port 27017
+rs.initiate()
+rs.add("localdb:27017");
+rs.conf();
+
